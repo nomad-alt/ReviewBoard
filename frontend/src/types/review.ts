@@ -9,3 +9,17 @@ export type Drawing = {
   created_at: string
 }
 
+export type ReviewCommentStatus = 'OPEN' | 'RESOLVED'
+
+export type ReviewComment = {
+  id: number
+  drawing: number
+  marker_number: number
+  title: string
+  description: string
+  x_position: number
+  y_position: number
+  status: ReviewCommentStatus
+  created_at: string
+  updated_at: string
+}

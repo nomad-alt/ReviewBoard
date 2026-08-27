@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 
 import { getDrawings } from '../api/reviewBoardApi'
 import DrawingCard from '../components/DrawingCard'
+import SiteHeader from '../components/SiteHeader'
 import type { Drawing } from '../types/review'
 
 type DashboardState =
@@ -54,15 +55,7 @@ function DashboardPage() {
 
   return (
     <div className="app-shell">
-      <header className="site-header">
-        <a className="brand" href="/" aria-label="ReviewBoard dashboard">
-          <span className="brand__mark" aria-hidden="true">
-            RB
-          </span>
-          <span>ReviewBoard</span>
-        </a>
-        <span className="site-header__context">Drawing reviews</span>
-      </header>
+      <SiteHeader />
 
       <main className="dashboard" id="main-content">
         <div className="dashboard__heading">

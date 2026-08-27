@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 import type { Drawing, DrawingStatus } from '../types/review'
 
 type DrawingCardProps = {
@@ -36,14 +38,12 @@ function DrawingCard({ drawing }: DrawingCardProps) {
 
         <h2>{drawing.title}</h2>
 
-        <button
+        <Link
           className="button button--secondary drawing-card__action"
-          type="button"
-          disabled
-          title="The review workspace will be added in Milestone 4"
+          to={`/drawings/${drawing.id}`}
         >
           Open drawing
-        </button>
+        </Link>
       </div>
     </article>
   )
