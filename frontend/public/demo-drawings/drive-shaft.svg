@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Drive shaft detail</title>
+  <desc id="desc">A simplified machined drive shaft drawing used as ReviewBoard demo data.</desc>
+  <rect width="1200" height="760" fill="#f8faf9"/>
+  <g fill="none" stroke="#243431" stroke-width="8" stroke-linejoin="round">
+    <path d="M120 310h150v-65h190v35h280v-35h190v65h150v140H930v65H740v-35H460v35H270v-65H120z"/>
+    <path d="M120 330h-35v100h35M1080 330h35v100h-35"/>
+  </g>
+  <path d="M55 380h1090" fill="none" stroke="#7b8986" stroke-width="2" stroke-dasharray="14 8"/>
+  <g fill="none" stroke="#63716e" stroke-width="2">
+    <path d="M270 190h660M270 170v40M930 170v40M290 180l-20 10 20 10M910 180l20 10-20 10"/>
+    <path d="M460 575h280M460 555v40M740 555v40M480 565l-20 10 20 10M720 565l20 10-20 10"/>
+    <path d="M1040 310v140M1020 310h40M1020 450h40"/>
+  </g>
+  <g fill="#40514d" font-family="Arial, sans-serif" font-size="22">
+    <text x="565" y="170">420</text>
+    <text x="570" y="610">180</text>
+    <text x="970" y="295">Ø68</text>
+    <text x="470" y="255">Ra 0.8</text>
+    <text x="735" y="535">2 × 2 CHAMFER</text>
+  </g>
+</svg>

@@ -2,13 +2,16 @@
 
 ReviewBoard is a junior-level full-stack portfolio project for reviewing engineering drawings. The MVP will let reviewers place numbered markers on seeded drawings, write comments, and resolve them.
 
-This repository currently contains the Milestone 1 foundation:
+This repository currently contains the Milestone 2 backend domain and API:
 
 - React, TypeScript, and Vite frontend
 - Django and Django REST Framework backend
 - PostgreSQL-ready environment configuration
 - Development CORS configuration
 - API health endpoint
+- Drawing and review-comment models
+- REST endpoints with coordinate and status validation
+- Repeatable demo-data seed command
 
 ## Repository layout
 
@@ -47,10 +50,23 @@ python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements.txt
 python manage.py migrate
+python manage.py seed_demo_data
 python manage.py runserver
 ```
 
 The API runs at `http://127.0.0.1:8000`. Its health endpoint is available at `http://127.0.0.1:8000/api/health/`.
+
+## API endpoints
+
+| Method | Endpoint | Purpose |
+| --- | --- | --- |
+| `GET` | `/api/drawings/` | List drawings and open-comment counts |
+| `GET` | `/api/drawings/{id}/` | Retrieve one drawing |
+| `GET` | `/api/drawings/{id}/comments/` | List a drawing's comments |
+| `POST` | `/api/drawings/{id}/comments/` | Create a numbered comment marker |
+| `GET` | `/api/comments/{id}/` | Retrieve one comment |
+| `PATCH` | `/api/comments/{id}/` | Update comment content or status |
+| `DELETE` | `/api/comments/{id}/` | Delete one comment |
 
 ## 3. Run the frontend
 
@@ -79,5 +95,4 @@ python manage.py test
 
 ## Current scope
 
-Domain models, drawing cards, review markers, and comment workflows intentionally belong to later milestones. Authentication, uploads, WebSockets, Docker, and global state libraries are outside the MVP.
-
+Drawing cards, interactive review markers, and frontend comment workflows intentionally belong to later milestones. Authentication, uploads, WebSockets, Docker, and global state libraries are outside the MVP.

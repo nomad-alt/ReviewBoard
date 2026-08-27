@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Support bracket assembly</title>
+  <desc id="desc">A simplified mechanical support bracket drawing used as ReviewBoard demo data.</desc>
+  <rect width="1200" height="760" fill="#f8faf9"/>
+  <g fill="none" stroke="#243431" stroke-width="8" stroke-linejoin="round">
+    <path d="M250 585h700v70H250zM405 585V235h105l85 350M795 585V235H690l-85 350"/>
+    <circle cx="457" cy="310" r="38"/>
+    <circle cx="743" cy="310" r="38"/>
+    <circle cx="360" cy="620" r="20"/>
+    <circle cx="840" cy="620" r="20"/>
+  </g>
+  <g fill="none" stroke="#7b8986" stroke-width="2" stroke-dasharray="12 8">
+    <path d="M600 140v565M185 620h830M457 215v190M362 310h190M743 215v190M648 310h190"/>
+  </g>
+  <g fill="none" stroke="#63716e" stroke-width="2">
+    <path d="M405 180h390M405 160v40M795 160v40M425 170l-20 10 20 10M775 170l20 10-20 10"/>
+    <path d="M990 585v70M970 585h40M970 655h40M980 605l10-20 10 20M980 635l10 20 10-20"/>
+  </g>
+  <g fill="#40514d" font-family="Arial, sans-serif" font-size="22">
+    <text x="572" y="165">240</text>
+    <text x="1020" y="628">18</text>
+    <text x="478" y="282">Ø12 THRU</text>
+    <text x="770" y="410">2X R38</text>
+  </g>
+</svg>
+
