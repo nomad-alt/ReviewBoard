@@ -1,4 +1,10 @@
-import { useEffect, useRef, useState, type FormEvent } from 'react'
+import {
+  useEffect,
+  useRef,
+  useState,
+  type FormEvent,
+  type KeyboardEvent,
+} from 'react'
 
 import type { CreateReviewCommentInput } from '../types/review'
 
@@ -70,8 +76,21 @@ function CommentForm({
     })
   }
 
+  function handleKeyDown(event: KeyboardEvent<HTMLFormElement>) {
+    if (event.key === 'Escape' && !isSaving) {
+      event.preventDefault()
+      onCancel()
+    }
+  }
+
   return (
-    <form className="comment-form" onSubmit={handleSubmit} noValidate>
+    <form
+      className="comment-form"
+      aria-label={`Create comment for marker ${markerNumber}`}
+      onSubmit={handleSubmit}
+      onKeyDown={handleKeyDown}
+      noValidate
+    >
       <div className="comment-form__heading">
         <div>
           <p className="eyebrow">New review note</p>
@@ -135,7 +154,12 @@ function CommentForm({
       )}
 
       <div className="comment-form__actions">
-        <button className="button button--secondary" type="button" disabled={isSaving} onClick={onCancel}>
+        <button
+          className="button button--secondary"
+          type="button"
+          disabled={isSaving}
+          onClick={onCancel}
+        >
           Cancel
         </button>
         <button className="button button--primary" type="submit" disabled={isSaving}>

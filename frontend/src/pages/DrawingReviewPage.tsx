@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 
 import {
@@ -33,6 +33,8 @@ function DrawingReviewPage() {
   const [draftPosition, setDraftPosition] = useState<CommentPosition | null>(null)
   const [isSavingComment, setIsSavingComment] = useState(false)
   const [saveError, setSaveError] = useState<string | null>(null)
+  const [commentToFocus, setCommentToFocus] = useState<number | null>(null)
+  const addCommentButtonRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
     setDraftPosition(null)
@@ -88,6 +90,7 @@ function DrawingReviewPage() {
   function cancelDraft() {
     setDraftPosition(null)
     setSaveError(null)
+    window.requestAnimationFrame(() => addCommentButtonRef.current?.focus())
   }
 
   async function saveComment(comment: CreateReviewCommentInput) {
@@ -110,6 +113,7 @@ function DrawingReviewPage() {
           : currentState,
       )
       setSelectedCommentId(createdComment.id)
+      setCommentToFocus(createdComment.id)
       setDraftPosition(null)
     } catch {
       setSaveError('The comment could not be saved. Check your connection and try again.')
@@ -187,10 +191,21 @@ function DrawingReviewPage() {
               <section className="drawing-panel" aria-labelledby="drawing-panel-title">
                 <div className="drawing-panel__toolbar">
                   <h2 id="drawing-panel-title">Drawing sheet</h2>
-                  <span>
-                    {state.comments.length}{' '}
-                    {state.comments.length === 1 ? 'marker' : 'markers'}
-                  </span>
+                  <div className="drawing-panel__actions">
+                    <span>
+                      {state.comments.length}{' '}
+                      {state.comments.length === 1 ? 'marker' : 'markers'}
+                    </span>
+                    <button
+                      ref={addCommentButtonRef}
+                      className="button button--secondary button--compact"
+                      type="button"
+                      disabled={isSavingComment}
+                      onClick={() => placeDraft({ x_position: 50, y_position: 50 })}
+                    >
+                      Add comment
+                    </button>
+                  </div>
                 </div>
                 <DrawingViewer
                   drawing={state.drawing}
@@ -224,6 +239,8 @@ function DrawingReviewPage() {
                   comments={state.comments}
                   selectedCommentId={selectedCommentId}
                   onSelectComment={setSelectedCommentId}
+                  commentToFocus={commentToFocus}
+                  onCommentFocused={() => setCommentToFocus(null)}
                 />
               )}
             </div>

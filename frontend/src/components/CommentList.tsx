@@ -5,12 +5,16 @@ type CommentListProps = {
   comments: ReviewComment[]
   selectedCommentId: number | null
   onSelectComment: (commentId: number) => void
+  commentToFocus?: number | null
+  onCommentFocused?: () => void
 }
 
 function CommentList({
   comments,
   selectedCommentId,
   onSelectComment,
+  commentToFocus = null,
+  onCommentFocused,
 }: CommentListProps) {
   const selectedComment =
     comments.find((comment) => comment.id === selectedCommentId) ?? null
@@ -37,6 +41,8 @@ function CommentList({
                 comment={comment}
                 isSelected={comment.id === selectedCommentId}
                 onSelect={onSelectComment}
+                shouldFocus={comment.id === commentToFocus}
+                onFocused={onCommentFocused}
                 key={comment.id}
               />
             ))}

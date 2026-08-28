@@ -12,6 +12,7 @@
   --surface: #ffffff;
   --accent: #205f56;
   --accent-dark: #174b44;
+  --focus-ring: #0b7164;
 }
 
 * {
@@ -256,8 +257,12 @@ h1 {
 
 .button:focus-visible,
 .brand:focus-visible {
-  outline: 3px solid #79b8ae;
+  outline: 3px solid var(--focus-ring);
   outline-offset: 3px;
+}
+
+.brand {
+  min-height: 2.75rem;
 }
 
 .button--primary {
@@ -278,6 +283,12 @@ h1 {
 .button--secondary:hover {
   border-color: #8fa09b;
   background: #f3f7f5;
+}
+
+.button--compact {
+  min-height: 2.75rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.75rem;
 }
 
 .button:disabled {
@@ -395,6 +406,7 @@ h1 {
   font-size: 0.875rem;
   font-weight: 700;
   text-decoration: none;
+  min-height: 2.75rem;
 }
 
 .back-link:hover {
@@ -405,7 +417,7 @@ h1 {
 .back-link:focus-visible,
 .comment-list-item:focus-visible,
 .marker:focus-visible {
-  outline: 3px solid #79b8ae;
+  outline: 3px solid var(--focus-ring);
   outline-offset: 3px;
 }
 
@@ -465,6 +477,12 @@ h1 {
 .drawing-panel__toolbar span {
   color: var(--muted);
   font-size: 0.75rem;
+}
+
+.drawing-panel__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
 }
 
 .drawing-viewer {
@@ -782,7 +800,7 @@ h1 {
 .form-field input:focus,
 .form-field textarea:focus {
   border-color: var(--accent);
-  outline: 3px solid rgb(121 184 174 / 45%);
+  outline: 3px solid var(--focus-ring);
   outline-offset: 1px;
 }
 
@@ -868,10 +886,16 @@ h1 {
 
   .comment-sidebar {
     position: static;
+    scroll-margin-top: 1rem;
   }
 
   .comment-list {
     max-height: none;
+  }
+
+  .marker {
+    width: 2.75rem;
+    height: 2.75rem;
   }
 }
 
@@ -930,6 +954,14 @@ h1 {
     padding: 0 1rem;
   }
 
+  .drawing-panel__actions {
+    gap: 0.625rem;
+  }
+
+  .drawing-panel__actions > span {
+    display: none;
+  }
+
   .drawing-viewer {
     padding: 0.5rem;
   }
@@ -940,6 +972,13 @@ h1 {
 
   .comment-list-item {
     padding: 1rem;
+  }
+}
+
+@media (pointer: coarse) {
+  .marker {
+    width: 2.75rem;
+    height: 2.75rem;
   }
 }
 

@@ -39,7 +39,11 @@ function DrawingViewer({
         className="drawing-viewer__canvas drawing-viewer__canvas--commentable"
         onClick={handleCanvasClick}
       >
-        <img src={drawing.image} alt={`${drawing.title} technical drawing`} />
+        <img
+          src={drawing.image}
+          alt={`${drawing.title} technical drawing`}
+          draggable="false"
+        />
         {comments.map((comment) => (
           <Marker
             comment={comment}
@@ -63,8 +67,8 @@ function DrawingViewer({
         )}
       </div>
       <figcaption>
-        Click the drawing to place a comment marker. Coordinates stay aligned as the
-        drawing resizes.
+        Click the drawing to place a marker, or use Add comment with a keyboard.
+        Coordinates stay aligned as the drawing resizes.
       </figcaption>
     </figure>
   )
