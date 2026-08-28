@@ -55,6 +55,7 @@ class DrawingCommentListCreateView(generics.ListCreateAPIView):
             serializer.save(
                 drawing=drawing,
                 marker_number=(current_max or 0) + 1,
+                status=ReviewComment.Status.OPEN,
             )
 
 

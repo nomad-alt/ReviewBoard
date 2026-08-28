@@ -29,7 +29,7 @@ function DrawingReviewPage() {
   const parsedDrawingId = Number(drawingId)
   const [state, setState] = useState<ReviewPageState>({ status: 'loading' })
   const [selectedCommentId, setSelectedCommentId] = useState<number | null>(null)
-  const [requestNumber, setRequestNumber] = useState(0)
+  const [retryKey, setRetryKey] = useState(0)
   const [draftPosition, setDraftPosition] = useState<CommentPosition | null>(null)
   const [isSavingComment, setIsSavingComment] = useState(false)
   const [saveError, setSaveError] = useState<string | null>(null)
@@ -78,7 +78,12 @@ function DrawingReviewPage() {
     void loadReview()
 
     return () => controller.abort()
-  }, [parsedDrawingId, requestNumber])
+  }, [parsedDrawingId, retryKey])
+
+  const nextMarkerNumber =
+    state.status === 'success'
+      ? Math.max(0, ...state.comments.map((comment) => comment.marker_number)) + 1
+      : 1
 
   function placeDraft(position: CommentPosition) {
     if (isSavingComment) return
@@ -158,7 +163,7 @@ function DrawingReviewPage() {
             <button
               className="button button--primary"
               type="button"
-              onClick={() => setRequestNumber((number) => number + 1)}
+              onClick={() => setRetryKey((key) => key + 1)}
             >
               Try again
             </button>
@@ -213,9 +218,7 @@ function DrawingReviewPage() {
                   selectedCommentId={selectedCommentId}
                   onSelectComment={setSelectedCommentId}
                   draftPosition={draftPosition}
-                  draftMarkerNumber={
-                    Math.max(0, ...state.comments.map((comment) => comment.marker_number)) + 1
-                  }
+                  draftMarkerNumber={nextMarkerNumber}
                   onPlaceDraft={placeDraft}
                 />
               </section>
@@ -223,10 +226,7 @@ function DrawingReviewPage() {
               {draftPosition ? (
                 <aside className="comment-sidebar" aria-label="Create comment">
                   <CommentForm
-                    markerNumber={
-                      Math.max(0, ...state.comments.map((comment) => comment.marker_number)) +
-                      1
-                    }
+                    markerNumber={nextMarkerNumber}
                     position={draftPosition}
                     isSaving={isSavingComment}
                     saveError={saveError}

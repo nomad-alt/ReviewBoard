@@ -29,7 +29,7 @@ function LoadingCards() {
 
 function DashboardPage() {
   const [state, setState] = useState<DashboardState>({ status: 'loading' })
-  const [requestNumber, setRequestNumber] = useState(0)
+  const [retryKey, setRetryKey] = useState(0)
 
   useEffect(() => {
     const controller = new AbortController()
@@ -51,7 +51,7 @@ function DashboardPage() {
     void loadDrawings()
 
     return () => controller.abort()
-  }, [requestNumber])
+  }, [retryKey])
 
   return (
     <div className="app-shell">
@@ -94,7 +94,7 @@ function DashboardPage() {
             <button
               className="button button--primary"
               type="button"
-              onClick={() => setRequestNumber((number) => number + 1)}
+              onClick={() => setRetryKey((key) => key + 1)}
             >
               Try again
             </button>

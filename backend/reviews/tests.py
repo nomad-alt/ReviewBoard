@@ -58,6 +58,21 @@ class DrawingApiTests(TestCase):
         self.assertEqual(response.json()["title"], "Assembly Drawing")
         self.assertEqual(response.json()["open_comment_count"], 1)
 
+    def test_open_comment_count_updates_after_comment_is_resolved(self):
+        open_comment = self.drawing.comments.get(status=ReviewComment.Status.OPEN)
+
+        update_response = self.client.patch(
+            reverse("review-comment-detail", kwargs={"pk": open_comment.pk}),
+            data=json.dumps({"status": ReviewComment.Status.RESOLVED}),
+            content_type="application/json",
+        )
+        drawing_response = self.client.get(
+            reverse("drawing-detail", kwargs={"pk": self.drawing.pk})
+        )
+
+        self.assertEqual(update_response.status_code, 200)
+        self.assertEqual(drawing_response.json()["open_comment_count"], 0)
+
 
 class ReviewCommentApiTests(TestCase):
     @classmethod
@@ -108,6 +123,7 @@ class ReviewCommentApiTests(TestCase):
                 "description": "A newly identified issue.",
                 "x_position": 62.45,
                 "y_position": 31.8,
+                "status": ReviewComment.Status.RESOLVED,
             },
             content_type="application/json",
         )
@@ -117,6 +133,37 @@ class ReviewCommentApiTests(TestCase):
         self.assertEqual(response.json()["marker_number"], 2)
         self.assertEqual(response.json()["status"], ReviewComment.Status.OPEN)
         self.assertEqual(response.json()["x_position"], 62.45)
+
+    def test_create_comment_uses_highest_marker_number_not_comment_count(self):
+        ReviewComment.objects.create(
+            drawing=self.drawing,
+            marker_number=4,
+            title="Marker with a gap",
+            description="Markers two and three were removed.",
+            x_position="60.00",
+            y_position="70.00",
+        )
+
+        response = self.client.post(
+            self.comment_list_url(),
+            data={
+                "title": "Next marker",
+                "description": "This should be marker five.",
+                "x_position": 80,
+                "y_position": 90,
+            },
+            content_type="application/json",
+        )
+
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.json()["marker_number"], 5)
+
+    def test_comment_list_returns_not_found_for_unknown_drawing(self):
+        response = self.client.get(
+            reverse("drawing-comment-list", kwargs={"drawing_pk": 99999})
+        )
+
+        self.assertEqual(response.status_code, 404)
 
     def test_create_comment_rejects_coordinates_outside_drawing(self):
         response = self.client.post(
