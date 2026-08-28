@@ -1,3 +1,5 @@
+import type { MouseEvent } from 'react'
+
 import type { ReviewComment } from '../types/review'
 
 type MarkerProps = {
@@ -7,6 +9,11 @@ type MarkerProps = {
 }
 
 function Marker({ comment, isSelected, onSelect }: MarkerProps) {
+  function handleClick(event: MouseEvent<HTMLButtonElement>) {
+    event.stopPropagation()
+    onSelect(comment.id)
+  }
+
   return (
     <button
       className={`marker marker--${comment.status.toLowerCase()}${
@@ -19,7 +26,7 @@ function Marker({ comment, isSelected, onSelect }: MarkerProps) {
       }}
       aria-label={`Marker ${comment.marker_number}: ${comment.title}`}
       aria-pressed={isSelected}
-      onClick={() => onSelect(comment.id)}
+      onClick={handleClick}
     >
       {comment.marker_number}
     </button>

@@ -1,4 +1,8 @@
-import type { Drawing, ReviewComment } from '../types/review'
+import type {
+  CreateReviewCommentInput,
+  Drawing,
+  ReviewComment,
+} from '../types/review'
 
 export class ApiError extends Error {
   status: number
@@ -35,3 +39,21 @@ export function getDrawingComments(
   return getJson<ReviewComment[]>(`/api/drawings/${drawingId}/comments/`, signal)
 }
 
+export async function createDrawingComment(
+  drawingId: number,
+  comment: CreateReviewCommentInput,
+): Promise<ReviewComment> {
+  const response = await fetch(`/api/drawings/${drawingId}/comments/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(comment),
+  })
+
+  if (!response.ok) {
+    throw new ApiError(`Request failed (${response.status}).`, response.status)
+  }
+
+  return response.json() as Promise<ReviewComment>
+}

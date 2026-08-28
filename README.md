@@ -2,7 +2,7 @@
 
 ReviewBoard is a junior-level full-stack portfolio project for reviewing engineering drawings. The MVP will let reviewers place numbered markers on seeded drawings, write comments, and resolve them.
 
-This repository currently contains the Milestone 4 read-only review workspace and backend API:
+This repository currently contains the Milestone 5 comment-creation workflow and backend API:
 
 - React, TypeScript, and Vite frontend
 - Django and Django REST Framework backend
@@ -17,6 +17,8 @@ This repository currently contains the Milestone 4 read-only review workspace an
 - Client-side dashboard and drawing routes
 - Responsive drawing viewer with percentage-positioned markers
 - Synchronized marker, comment-list, and comment-detail selection
+- Click-to-place comment markers with responsive percentage coordinates
+- Comment creation with validation, cancel, focus, saving, and error states
 
 ## Repository layout
 
@@ -100,4 +102,4 @@ python manage.py test
 
 ## Current scope
 
-Creating comments, filtering comments, and changing review status intentionally belong to later milestones. Authentication, uploads, WebSockets, Docker, and global state libraries are outside the MVP.
+Filtering comments and changing review status intentionally belong to later milestones. Authentication, uploads, WebSockets, Docker, and global state libraries are outside the MVP.

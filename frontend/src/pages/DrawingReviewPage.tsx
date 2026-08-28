@@ -1,11 +1,22 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 
-import { ApiError, getDrawing, getDrawingComments } from '../api/reviewBoardApi'
+import {
+  ApiError,
+  createDrawingComment,
+  getDrawing,
+  getDrawingComments,
+} from '../api/reviewBoardApi'
+import CommentForm from '../components/CommentForm'
 import CommentList from '../components/CommentList'
 import DrawingViewer from '../components/DrawingViewer'
 import SiteHeader from '../components/SiteHeader'
-import type { Drawing, ReviewComment } from '../types/review'
+import type {
+  CommentPosition,
+  CreateReviewCommentInput,
+  Drawing,
+  ReviewComment,
+} from '../types/review'
 
 type ReviewPageState =
   | { status: 'loading' }
@@ -19,8 +30,14 @@ function DrawingReviewPage() {
   const [state, setState] = useState<ReviewPageState>({ status: 'loading' })
   const [selectedCommentId, setSelectedCommentId] = useState<number | null>(null)
   const [requestNumber, setRequestNumber] = useState(0)
+  const [draftPosition, setDraftPosition] = useState<CommentPosition | null>(null)
+  const [isSavingComment, setIsSavingComment] = useState(false)
+  const [saveError, setSaveError] = useState<string | null>(null)
 
   useEffect(() => {
+    setDraftPosition(null)
+    setSaveError(null)
+
     if (!Number.isInteger(parsedDrawingId) || parsedDrawingId < 1) {
       setState({ status: 'not-found' })
       return
@@ -60,6 +77,46 @@ function DrawingReviewPage() {
 
     return () => controller.abort()
   }, [parsedDrawingId, requestNumber])
+
+  function placeDraft(position: CommentPosition) {
+    if (isSavingComment) return
+
+    setDraftPosition(position)
+    setSaveError(null)
+  }
+
+  function cancelDraft() {
+    setDraftPosition(null)
+    setSaveError(null)
+  }
+
+  async function saveComment(comment: CreateReviewCommentInput) {
+    if (state.status !== 'success') return
+
+    setIsSavingComment(true)
+    setSaveError(null)
+
+    try {
+      const createdComment = await createDrawingComment(state.drawing.id, comment)
+
+      setState((currentState) =>
+        currentState.status === 'success'
+          ? {
+              ...currentState,
+              comments: [...currentState.comments, createdComment].sort(
+                (a, b) => a.marker_number - b.marker_number,
+              ),
+            }
+          : currentState,
+      )
+      setSelectedCommentId(createdComment.id)
+      setDraftPosition(null)
+    } catch {
+      setSaveError('The comment could not be saved. Check your connection and try again.')
+    } finally {
+      setIsSavingComment(false)
+    }
+  }
 
   return (
     <div className="app-shell">
@@ -140,14 +197,35 @@ function DrawingReviewPage() {
                   comments={state.comments}
                   selectedCommentId={selectedCommentId}
                   onSelectComment={setSelectedCommentId}
+                  draftPosition={draftPosition}
+                  draftMarkerNumber={
+                    Math.max(0, ...state.comments.map((comment) => comment.marker_number)) + 1
+                  }
+                  onPlaceDraft={placeDraft}
                 />
               </section>
 
-              <CommentList
-                comments={state.comments}
-                selectedCommentId={selectedCommentId}
-                onSelectComment={setSelectedCommentId}
-              />
+              {draftPosition ? (
+                <aside className="comment-sidebar" aria-label="Create comment">
+                  <CommentForm
+                    markerNumber={
+                      Math.max(0, ...state.comments.map((comment) => comment.marker_number)) +
+                      1
+                    }
+                    position={draftPosition}
+                    isSaving={isSavingComment}
+                    saveError={saveError}
+                    onSave={saveComment}
+                    onCancel={cancelDraft}
+                  />
+                </aside>
+              ) : (
+                <CommentList
+                  comments={state.comments}
+                  selectedCommentId={selectedCommentId}
+                  onSelectComment={setSelectedCommentId}
+                />
+              )}
             </div>
           </>
         )}
@@ -157,4 +235,3 @@ function DrawingReviewPage() {
 }
 
 export default DrawingReviewPage
-

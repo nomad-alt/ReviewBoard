@@ -23,3 +23,13 @@ export type ReviewComment = {
   created_at: string
   updated_at: string
 }
+
+export type CommentPosition = {
+  x_position: number
+  y_position: number
+}
+
+export type CreateReviewCommentInput = CommentPosition & {
+  title: string
+  description: string
+}
